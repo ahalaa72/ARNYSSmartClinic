@@ -17,7 +17,11 @@
       "Bash(cat:*)",
       "Read(//usr/local/tomcat/logs/**)",
       "Bash(awk:*)",
-      "Bash(jstack:*)"
+      "Bash(jstack:*)",
+      "Bash(mysql:*)",
+      "Bash(nc:*)",
+      "Bash(while true)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

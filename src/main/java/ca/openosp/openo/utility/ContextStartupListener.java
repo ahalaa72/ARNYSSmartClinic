@@ -135,6 +135,13 @@ public class ContextStartupListener implements javax.servlet.ServletContextListe
         p.setProgramStatus("active");
         programDao.saveProgram(p);
 
+        // Retrieve the program again to get the generated ID
+        p = programDao.getProgramByName("OSCAR");
+        if (p == null || p.getId() == null) {
+            logger.error("Failed to create OSCAR program - cannot proceed with ProgramProvider setup");
+            return;
+        }
+
         ProgramProvider pp = new ProgramProvider();
         pp.setProviderNo("999998");
         pp.setProgramId(p.getId().longValue());

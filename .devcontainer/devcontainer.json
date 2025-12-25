@@ -14,7 +14,9 @@
                 "redhat.vscode-community-server-connector",
                 "redhat.fabric8-analytics",
                 "vscjava.vscode-java-pack",
-                "anthropic.claude-code"
+                "anthropic.claude-code",
+                "mtxr.sqltools",
+                "mtxr.sqltools-driver-mysql"
             ],
             "settings": {
                 "terminal.integrated.shell.linux": "/bin/bash",
