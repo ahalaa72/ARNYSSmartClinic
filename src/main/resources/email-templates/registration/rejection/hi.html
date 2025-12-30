@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>पंजीकरण अपडेट</title>
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Segoe UI', Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .reason-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .reason-box h3 {
+            margin-top: 0;
+            color: #856404;
+            font-size: 16px;
+        }
+        .reason-text {
+            color: #856404;
+            font-style: italic;
+        }
+        .help-box {
+            background: #e8f4f8;
+            border-left: 4px solid #1a5276;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        .help-box h4 {
+            margin: 0 0 10px 0;
+            color: #1a5276;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="icon">ℹ️</div>
+            <h1>पंजीकरण अपडेट</h1>
+        </div>
+
+        <div class="content">
+            <p class="greeting">प्रिय {{FIRST_NAME}},</p>
+
+            <p>हम इस समय <strong>{{CLINIC_NAME}}</strong> में आपका रोगी पंजीकरण पूरा करने में असमर्थ थे।</p>
+
+            <div class="reason-box">
+                <h3>कारण</h3>
+                <p class="reason-text">{{REJECTION_REASON}}</p>
+            </div>
+
+            <div class="help-box">
+                <h4>आप क्या कर सकते हैं</h4>
+                <p>यदि आपको लगता है कि यह एक त्रुटि है या आप इस पर आगे चर्चा करना चाहते हैं, तो कृपया कार्यालय समय के दौरान वैध पहचान के साथ व्यक्तिगत रूप से हमारे क्लिनिक में आएं।</p>
+                <p>हमारा स्टाफ पंजीकरण प्रक्रिया में आपकी सहायता करने में प्रसन्न होगा।</p>
+            </div>
+
+            <p>इससे होने वाली किसी भी असुविधा के लिए हम क्षमा चाहते हैं।</p>
+
+            <p>सादर,<br>
+            <strong>{{CLINIC_NAME}} टीम</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{CLINIC_NAME}}</strong></p>
+            <p>{{CLINIC_ADDRESS}}</p>
+            <p>फोन: {{CLINIC_PHONE}}</p>
+            <p style="margin-top: 15px; color: #999;">
+                यह एक स्वचालित संदेश है। कृपया इस ईमेल का सीधे जवाब न दें।
+            </p>
+        </div>
+    </div>
+</body>
+</html>

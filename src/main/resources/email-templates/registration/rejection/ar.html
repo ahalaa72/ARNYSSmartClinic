@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحديث التسجيل</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            direction: rtl;
+            text-align: right;
+        }
+        .email-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .reason-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .reason-box h3 {
+            margin-top: 0;
+            color: #856404;
+            font-size: 16px;
+        }
+        .reason-text {
+            color: #856404;
+            font-style: italic;
+        }
+        .help-box {
+            background: #e8f4f8;
+            border-right: 4px solid #1a5276;
+            border-left: none;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        .help-box h4 {
+            margin: 0 0 10px 0;
+            color: #1a5276;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="icon">ℹ️</div>
+            <h1>تحديث التسجيل</h1>
+        </div>
+
+        <div class="content">
+            <p class="greeting">عزيزي/عزيزتي {{FIRST_NAME}}،</p>
+
+            <p>لم نتمكن من إكمال تسجيلك كمريض في <strong>{{CLINIC_NAME}}</strong> في هذا الوقت.</p>
+
+            <div class="reason-box">
+                <h3>السبب</h3>
+                <p class="reason-text">{{REJECTION_REASON}}</p>
+            </div>
+
+            <div class="help-box">
+                <h4>ما يمكنك فعله</h4>
+                <p>إذا كنت تعتقد أن هذا خطأ أو ترغب في مناقشة هذا الأمر بشكل أكبر، يرجى زيارة عيادتنا شخصياً مع هوية صالحة خلال ساعات العمل.</p>
+                <p>سيكون موظفونا سعداء بمساعدتك في عملية التسجيل.</p>
+            </div>
+
+            <p>نعتذر عن أي إزعاج قد يسببه هذا.</p>
+
+            <p>مع أطيب التحيات،<br>
+            <strong>فريق {{CLINIC_NAME}}</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{CLINIC_NAME}}</strong></p>
+            <p>{{CLINIC_ADDRESS}}</p>
+            <p>الهاتف: {{CLINIC_PHONE}}</p>
+            <p style="margin-top: 15px; color: #999;">
+                هذه رسالة آلية. يرجى عدم الرد مباشرة على هذا البريد الإلكتروني.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

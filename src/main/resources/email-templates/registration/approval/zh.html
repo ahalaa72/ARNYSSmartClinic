@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册已确认</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header .checkmark {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .details-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .details-box h3 {
+            margin-top: 0;
+            color: #1a5276;
+            font-size: 16px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            color: #666;
+        }
+        .detail-value {
+            font-weight: 500;
+        }
+        .cta-box {
+            background: #e8f4f8;
+            border-left: 4px solid #1a5276;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        .cta-box h4 {
+            margin: 0 0 10px 0;
+            color: #1a5276;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="checkmark">✓</div>
+            <h1>注册已确认</h1>
+        </div>
+
+        <div class="content">
+            <p class="greeting">尊敬的 {{FIRST_NAME}}：</p>
+
+            <p>好消息！您的患者注册已获批准。您现已在 <strong>{{CLINIC_NAME}}</strong> 注册成功。</p>
+
+            <div class="details-box">
+                <h3>注册详情</h3>
+                <div class="detail-row">
+                    <span class="detail-label">姓名：</span>
+                    <span class="detail-value">{{FULL_NAME}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">健康卡：</span>
+                    <span class="detail-value">{{HIN_MASKED}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">注册日期：</span>
+                    <span class="detail-value">{{REGISTRATION_DATE}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">患者编号：</span>
+                    <span class="detail-value">#{{PATIENT_ID}}</span>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h4>下一步</h4>
+                <p>如需预约首次就诊，请致电 <strong>{{CLINIC_PHONE}}</strong> 或在工作时间内前往我们的诊所。</p>
+            </div>
+
+            <p>感谢您选择 {{CLINIC_NAME}} 满足您的医疗保健需求。我们期待为您服务。</p>
+
+            <p>此致敬礼，<br>
+            <strong>{{CLINIC_NAME}} 团队</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{CLINIC_NAME}}</strong></p>
+            <p>{{CLINIC_ADDRESS}}</p>
+            <p>电话：{{CLINIC_PHONE}}</p>
+            <p style="margin-top: 15px; color: #999;">
+                这是一封自动发送的邮件，请勿直接回复此邮件。
+            </p>
+        </div>
+    </div>
+</body>
+</html>

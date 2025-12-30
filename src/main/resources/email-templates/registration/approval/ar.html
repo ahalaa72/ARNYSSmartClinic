@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تم تأكيد التسجيل</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            direction: rtl;
+            text-align: right;
+        }
+        .email-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header .checkmark {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .details-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .details-box h3 {
+            margin-top: 0;
+            color: #1a5276;
+            font-size: 16px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            flex-direction: row-reverse;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            color: #666;
+        }
+        .detail-value {
+            font-weight: 500;
+        }
+        .cta-box {
+            background: #e8f4f8;
+            border-right: 4px solid #1a5276;
+            border-left: none;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        .cta-box h4 {
+            margin: 0 0 10px 0;
+            color: #1a5276;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="checkmark">✓</div>
+            <h1>تم تأكيد التسجيل</h1>
+        </div>
+
+        <div class="content">
+            <p class="greeting">عزيزي/عزيزتي {{FIRST_NAME}}،</p>
+
+            <p>أخبار سارة! تمت الموافقة على تسجيلك كمريض. أنت الآن مسجل في <strong>{{CLINIC_NAME}}</strong>.</p>
+
+            <div class="details-box">
+                <h3>تفاصيل التسجيل</h3>
+                <div class="detail-row">
+                    <span class="detail-value">{{FULL_NAME}}</span>
+                    <span class="detail-label">الاسم:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">{{HIN_MASKED}}</span>
+                    <span class="detail-label">البطاقة الصحية:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">{{REGISTRATION_DATE}}</span>
+                    <span class="detail-label">تاريخ التسجيل:</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">#{{PATIENT_ID}}</span>
+                    <span class="detail-label">رقم المريض:</span>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h4>الخطوات التالية</h4>
+                <p>لحجز موعدك الأول، يرجى الاتصال بنا على <strong>{{CLINIC_PHONE}}</strong> أو زيارة عيادتنا خلال ساعات العمل.</p>
+            </div>
+
+            <p>شكراً لاختياركم {{CLINIC_NAME}} لاحتياجاتكم الصحية. نتطلع لخدمتكم.</p>
+
+            <p>مع أطيب التحيات،<br>
+            <strong>فريق {{CLINIC_NAME}}</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{CLINIC_NAME}}</strong></p>
+            <p>{{CLINIC_ADDRESS}}</p>
+            <p>الهاتف: {{CLINIC_PHONE}}</p>
+            <p style="margin-top: 15px; color: #999;">
+                هذه رسالة آلية. يرجى عدم الرد مباشرة على هذا البريد الإلكتروني.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

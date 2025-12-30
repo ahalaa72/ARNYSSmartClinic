@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à jour de l'inscription</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .reason-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .reason-box h3 {
+            margin-top: 0;
+            color: #856404;
+            font-size: 16px;
+        }
+        .reason-text {
+            color: #856404;
+            font-style: italic;
+        }
+        .help-box {
+            background: #e8f4f8;
+            border-left: 4px solid #1a5276;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        .help-box h4 {
+            margin: 0 0 10px 0;
+            color: #1a5276;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="icon">ℹ️</div>
+            <h1>Mise à jour de l'inscription</h1>
+        </div>
+
+        <div class="content">
+            <p class="greeting">Cher(e) {{FIRST_NAME}},</p>
+
+            <p>Nous n'avons pas pu compléter votre inscription en tant que patient à <strong>{{CLINIC_NAME}}</strong> pour le moment.</p>
+
+            <div class="reason-box">
+                <h3>Raison</h3>
+                <p class="reason-text">{{REJECTION_REASON}}</p>
+            </div>
+
+            <div class="help-box">
+                <h4>Ce que vous pouvez faire</h4>
+                <p>Si vous pensez qu'il s'agit d'une erreur ou si vous souhaitez en discuter davantage, veuillez vous présenter à notre clinique en personne avec une pièce d'identité valide pendant les heures d'ouverture.</p>
+                <p>Notre personnel se fera un plaisir de vous aider dans le processus d'inscription.</p>
+            </div>
+
+            <p>Nous nous excusons pour tout inconvénient que cela pourrait causer.</p>
+
+            <p>Cordialement,<br>
+            <strong>L'équipe de {{CLINIC_NAME}}</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{CLINIC_NAME}}</strong></p>
+            <p>{{CLINIC_ADDRESS}}</p>
+            <p>Téléphone : {{CLINIC_PHONE}}</p>
+            <p style="margin-top: 15px; color: #999;">
+                Ceci est un message automatique. Veuillez ne pas répondre directement à ce courriel.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

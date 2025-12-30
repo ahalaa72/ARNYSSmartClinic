@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Patient Self-Registration Module - Spring Configuration
+  Version: 1.0.0
+
+  This is a standalone module configuration that can be enabled/disabled
+  independently of the core OpenO EMR application.
+
+  Installation:
+  1. Include this file in your main applicationContext.xml:
+     <import resource="applicationContext-registration.xml"/>
+  2. Or add it to web.xml contextConfigLocation parameter
+
+  Dependencies:
+  - ZXing (QR Code generation)
+  - Core OpenO EMR dependencies (Spring, Hibernate, etc.)
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/task
+           http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <description>
+        Patient Self-Registration Module Configuration
+
+        This module enables patients to self-register via QR code scanning.
+        It is designed as a standalone commercial module that can be
+        enabled/disabled per clinic.
+    </description>
+
+    <!-- ================================================================== -->
+    <!-- Module Configuration Properties                                     -->
+    <!-- ================================================================== -->
+
+    <context:property-placeholder
+        location="classpath:registration/registration-module.properties"
+        ignore-unresolvable="true"
+        ignore-resource-not-found="true"/>
+
+    <!-- ================================================================== -->
+    <!-- Component Scanning                                                  -->
+    <!-- ================================================================== -->
+
+    <!-- Scan for annotated components in registration package -->
+    <context:component-scan base-package="ca.openosp.openo.registration">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+    </context:component-scan>
+
+    <!-- ================================================================== -->
+    <!-- DAO Beans (Manual definitions for explicit control)                 -->
+    <!-- ================================================================== -->
+
+    <bean id="patientRegistrationQueueDao"
+          class="ca.openosp.openo.registration.dao.PatientRegistrationQueueDaoImpl"/>
+
+    <bean id="registrationTokenDao"
+          class="ca.openosp.openo.registration.dao.RegistrationTokenDaoImpl"/>
+
+    <bean id="registrationModuleConfigDao"
+          class="ca.openosp.openo.registration.dao.RegistrationModuleConfigDaoImpl"/>
+
+    <!-- ================================================================== -->
+    <!-- Service Beans                                                       -->
+    <!-- ================================================================== -->
+
+    <!-- Validation Service -->
+    <bean id="registrationValidator"
+          class="ca.openosp.openo.registration.util.RegistrationValidator"/>
+
+    <!-- QR Code Generator -->
+    <bean id="qrCodeGenerator"
+          class="ca.openosp.openo.registration.util.QRCodeGenerator">
+        <property name="defaultWidth" value="${registration.qrcode.width:300}"/>
+        <property name="defaultHeight" value="${registration.qrcode.height:300}"/>
+    </bean>
+
+    <!-- Transfer Service (Registration -> Demographic) -->
+    <bean id="registrationTransferService"
+          class="ca.openosp.openo.registration.service.RegistrationTransferService">
+        <property name="patientRegistrationQueueDao" ref="patientRegistrationQueueDao"/>
+    </bean>
+
+    <!-- Email Notification Service -->
+    <bean id="registrationNotificationService"
+          class="ca.openosp.openo.registration.service.RegistrationNotificationService">
+        <property name="enabled" value="${registration.email.enabled:true}"/>
+        <property name="fromAddress" value="${registration.email.from.address:noreply@clinic.example.com}"/>
+        <property name="fromName" value="${registration.email.from.name:Patient Registration}"/>
+    </bean>
+
+    <!-- ================================================================== -->
+    <!-- Scheduled Tasks (Cleanup Jobs)                                      -->
+    <!-- ================================================================== -->
+
+    <task:annotation-driven scheduler="registrationScheduler"/>
+
+    <task:scheduler id="registrationScheduler" pool-size="2"/>
+
+    <!-- Token Cleanup Job -->
+    <bean id="registrationCleanupJob"
+          class="ca.openosp.openo.registration.service.RegistrationCleanupJob">
+        <property name="tokenDao" ref="registrationTokenDao"/>
+        <property name="queueDao" ref="patientRegistrationQueueDao"/>
+        <property name="retentionDays" value="${registration.data.retention.days:30}"/>
+    </bean>
+
+    <!-- ================================================================== -->
+    <!-- Transaction Management                                              -->
+    <!-- ================================================================== -->
+
+    <!-- Use the existing transaction manager from core application -->
+    <!-- Transactions are enabled via @Transactional annotations -->
+
+    <!-- ================================================================== -->
+    <!-- Rate Limiting Filter Bean                                           -->
+    <!-- ================================================================== -->
+
+    <bean id="registrationRateLimitService"
+          class="ca.openosp.openo.registration.service.RateLimitService">
+        <property name="maxSessionsPerIpPerHour" value="${registration.ratelimit.sessions.per.ip.per.hour:5}"/>
+        <property name="maxSubmissionsPerIpPerHour" value="${registration.ratelimit.submissions.per.ip.per.hour:5}"/>
+        <property name="enabled" value="${registration.ratelimit.enabled:true}"/>
+    </bean>
+
+</beans>
