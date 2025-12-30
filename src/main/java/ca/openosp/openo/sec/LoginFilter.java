@@ -79,7 +79,13 @@ public class LoginFilter implements Filter {
             "/loginResource",
             "/css/font/Roboto",
 		"/csrfguard",
-		"/mfa/"
+		"/mfa/",
+            // Patient Self-Registration Module - public endpoints
+            "/registration/",
+            "/registration/form.jsp",
+            "/registration/success.jsp",
+            "/registration/expired.jsp",
+            "/registration/start"
     };
 
     private static final String[] EXEMPT_URLS_FOR_REQUEST_TIMEOUT = {
@@ -110,7 +116,9 @@ public class LoginFilter implements Filter {
             "/css/bootstrap",
             "/css/Roboto.css",
             "/loginResource",
-            "/css/font/Roboto"
+            "/css/font/Roboto",
+            // Patient Self-Registration Module - public endpoints
+            "/registration/"
     };
 
     private static final String[] EXEMPT_URLS_FOR_REQUEST_TIMEOUT_REDIRECT = {
