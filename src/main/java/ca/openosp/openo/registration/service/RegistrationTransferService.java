@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -177,7 +178,7 @@ public class RegistrationTransferService {
             Demographic demographic = createDemographicFromQueue(queue, providerNo);
 
             // Persist demographic
-            getDemographicDao().persist(demographic);
+            getDemographicDao().save(demographic);
             Integer demographicNo = demographic.getDemographicNo();
 
             logger.info("Created demographic {} from registration queue {}", demographicNo, queueId);
@@ -333,7 +334,7 @@ public class RegistrationTransferService {
 
         // Check by HIN first (most definitive match)
         if (StringUtils.isNotBlank(queue.getHin())) {
-            List<Demographic> hinMatches = getDemographicDao().findByHin(queue.getHin());
+            List<Demographic> hinMatches = getDemographicDao().findByHin(queue.getHin(), "", 100);
             for (Demographic d : hinMatches) {
                 matches.add(new DuplicateMatch(
                         d.getDemographicNo(),
@@ -348,16 +349,26 @@ public class RegistrationTransferService {
 
         // Check by name + DOB
         if (StringUtils.isNotBlank(queue.getLastName()) &&
-                StringUtils.isNotBlank(queue.getFirstName()) &&
                 StringUtils.isNotBlank(queue.getYearOfBirth())) {
 
-            List<Demographic> nameMatches = getDemographicDao().findByNameAndDob(
-                    queue.getLastName(),
-                    queue.getFirstName(),
-                    queue.getYearOfBirth(),
-                    queue.getMonthOfBirth(),
-                    queue.getDateOfBirth()
-            );
+            // Build Calendar from registration queue DOB parts
+            Calendar dob = Calendar.getInstance();
+            try {
+                int year = Integer.parseInt(queue.getYearOfBirth());
+                int month = StringUtils.isNotBlank(queue.getMonthOfBirth()) ?
+                        Integer.parseInt(queue.getMonthOfBirth()) - 1 : 0; // Calendar months are 0-based
+                int day = StringUtils.isNotBlank(queue.getDateOfBirth()) ?
+                        Integer.parseInt(queue.getDateOfBirth()) : 1;
+                dob.set(year, month, day, 0, 0, 0);
+                dob.set(Calendar.MILLISECOND, 0);
+            } catch (NumberFormatException e) {
+                logger.warn("Invalid DOB format in queue {}", queue.getId());
+                dob = null;
+            }
+
+            List<Demographic> nameMatches = dob != null ?
+                    getDemographicDao().findByLastNameAndDob(queue.getLastName(), dob) :
+                    new ArrayList<>();
 
             for (Demographic d : nameMatches) {
                 // Skip if already found by HIN

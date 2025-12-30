@@ -790,7 +790,7 @@ public class PatientRegistrationQueue implements Serializable {
      * @return boolean true if status is PENDING
      */
     public boolean isPending() {
-        return Status.PENDING.equals(status);
+        return RegistrationStatus.PENDING.equals(status);
     }
 
     /**
@@ -799,7 +799,7 @@ public class PatientRegistrationQueue implements Serializable {
      * @return boolean true if status is APPROVED
      */
     public boolean isApproved() {
-        return Status.APPROVED.equals(status);
+        return RegistrationStatus.APPROVED.equals(status);
     }
 
     /**
@@ -808,7 +808,7 @@ public class PatientRegistrationQueue implements Serializable {
      * @return boolean true if status is REJECTED
      */
     public boolean isRejected() {
-        return Status.REJECTED.equals(status);
+        return RegistrationStatus.REJECTED.equals(status);
     }
 
     /**

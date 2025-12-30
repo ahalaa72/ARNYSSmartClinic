@@ -115,7 +115,15 @@ public class RegistrationQueue2Action extends ActionSupport {
                     loggedInInfo.getCurrentFacility().getId() : null;
 
             if (status != null && !status.isEmpty()) {
-                registrations = queueDao.findByStatus(status);
+                // Convert String status to enum
+                try {
+                    PatientRegistrationQueue.RegistrationStatus statusEnum =
+                            PatientRegistrationQueue.RegistrationStatus.valueOf(status.toUpperCase());
+                    registrations = queueDao.findByStatus(statusEnum);
+                } catch (IllegalArgumentException e) {
+                    // Invalid status, fall back to pending
+                    registrations = queueDao.findPendingByFacility(facilityId);
+                }
             } else {
                 registrations = queueDao.findPendingByFacility(facilityId);
             }
@@ -204,27 +212,31 @@ public class RegistrationQueue2Action extends ActionSupport {
             }
 
             // Transfer to demographic table
-            Integer demographicNo = transferService.transferTodemographic(registration, providerNo);
+            RegistrationTransferService.TransferResult result = transferService.transferToDemographic(
+                    registration.getId(), providerNo, loggedInInfo.getLoggedInProviderNo());
 
-            // Update queue record
-            registration.setStatus(PatientRegistrationQueue.RegistrationStatus.APPROVED);
-            registration.setReviewedAt(new Date());
-            registration.setReviewedBy(loggedInInfo.getLoggedInProviderNo());
-            registration.setDemographicNo(demographicNo);
-            queueDao.merge(registration);
+            if (!result.isSuccess()) {
+                errorMessage = "Failed to create patient record: " + result.getErrorMessage();
+                return ERROR;
+            }
+
+            Integer demographicNo = result.getDemographicNo();
+
+            // Reload registration after transfer (it was updated)
+            registration = queueDao.find(id);
 
             // Send notification to patient
             if (registration.getEmail() != null && !registration.getEmail().isEmpty()) {
                 try {
-                    notificationService.sendPatientApprovalEmail(registration);
+                    Integer facilityId = loggedInInfo.getCurrentFacility() != null ?
+                            loggedInInfo.getCurrentFacility().getId() : null;
+                    RegistrationModuleConfig config = configDao.getOrCreateForFacility(facilityId);
+                    notificationService.sendPatientApprovalEmail(registration, config);
                 } catch (Exception e) {
                     logger.warn("Failed to send approval email to patient", e);
                     // Don't fail the approval if email fails
                 }
             }
-
-            // Notify staff
-            notificationService.notifyStaffRegistrationProcessed(registration, "approved");
 
             successMessage = "Registration approved. Patient record #" + demographicNo + " created.";
             logger.info("Approved registration {} -> demographic {}", id, demographicNo);
@@ -283,14 +295,14 @@ public class RegistrationQueue2Action extends ActionSupport {
             // Send notification to patient
             if (registration.getEmail() != null && !registration.getEmail().isEmpty()) {
                 try {
-                    notificationService.sendPatientRejectionEmail(registration, rejectionReason);
+                    Integer facilityId = loggedInInfo.getCurrentFacility() != null ?
+                            loggedInInfo.getCurrentFacility().getId() : null;
+                    RegistrationModuleConfig config = configDao.getOrCreateForFacility(facilityId);
+                    notificationService.sendPatientRejectionEmail(registration, config);
                 } catch (Exception e) {
                     logger.warn("Failed to send rejection email to patient", e);
                 }
             }
-
-            // Notify staff
-            notificationService.notifyStaffRegistrationProcessed(registration, "rejected");
 
             successMessage = "Registration rejected.";
             logger.info("Rejected registration {} with reason: {}", id, rejectionReason);
@@ -343,7 +355,7 @@ public class RegistrationQueue2Action extends ActionSupport {
      *
      * @return String result name (null for direct response)
      */
-    public String getPendingCount() {
+    public String fetchPendingCount() {
         LoggedInInfo loggedInInfo = LoggedInInfo.getLoggedInInfoFromSession(request);
 
         if (!securityInfoManager.hasPrivilege(loggedInInfo, "_registration", "r", null)) {
@@ -395,19 +407,26 @@ public class RegistrationQueue2Action extends ActionSupport {
             }
 
             // Transfer to demographic table
-            Integer demographicNo = transferService.transferTodemographic(registration, providerNo);
+            RegistrationTransferService.TransferResult result = transferService.transferToDemographic(
+                    registration.getId(), providerNo, loggedInInfo.getLoggedInProviderNo());
 
-            // Update queue record
-            registration.setStatus(PatientRegistrationQueue.RegistrationStatus.APPROVED);
-            registration.setReviewedAt(new Date());
-            registration.setReviewedBy(loggedInInfo.getLoggedInProviderNo());
-            registration.setDemographicNo(demographicNo);
-            queueDao.merge(registration);
+            if (!result.isSuccess()) {
+                sendJsonResponse("{\"success\": false, \"error\": \"" + Encode.forJavaScript(result.getErrorMessage()) + "\"}");
+                return null;
+            }
+
+            Integer demographicNo = result.getDemographicNo();
+
+            // Reload registration after transfer
+            registration = queueDao.find(id);
 
             // Send notifications asynchronously (don't block response)
             if (registration.getEmail() != null && !registration.getEmail().isEmpty()) {
                 try {
-                    notificationService.sendPatientApprovalEmail(registration);
+                    Integer facilityId = loggedInInfo.getCurrentFacility() != null ?
+                            loggedInInfo.getCurrentFacility().getId() : null;
+                    RegistrationModuleConfig config = configDao.getOrCreateForFacility(facilityId);
+                    notificationService.sendPatientApprovalEmail(registration, config);
                 } catch (Exception e) {
                     logger.warn("Failed to send approval email", e);
                 }
@@ -465,7 +484,10 @@ public class RegistrationQueue2Action extends ActionSupport {
             // Send rejection email
             if (registration.getEmail() != null && !registration.getEmail().isEmpty()) {
                 try {
-                    notificationService.sendPatientRejectionEmail(registration, rejectionReason);
+                    Integer facilityId = loggedInInfo.getCurrentFacility() != null ?
+                            loggedInInfo.getCurrentFacility().getId() : null;
+                    RegistrationModuleConfig config = configDao.getOrCreateForFacility(facilityId);
+                    notificationService.sendPatientRejectionEmail(registration, config);
                 } catch (Exception e) {
                     logger.warn("Failed to send rejection email", e);
                 }

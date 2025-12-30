@@ -24,7 +24,7 @@ package ca.openosp.openo.registration.util;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.logging.log4j.LogManager;
@@ -37,8 +37,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * Utility class for generating QR codes for patient registration.
@@ -167,24 +165,32 @@ public class QRCodeGenerator {
      */
     public BufferedImage generateQRCodeImage(String content, int width, int height) throws QRCodeGenerationException {
         try {
-            // Configure encoding hints
-            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            // Configure encoding hints (using Hashtable for ZXing 1.5 compatibility)
+            java.util.Hashtable<EncodeHintType, Object> hints = new java.util.Hashtable<>();
             hints.put(EncodeHintType.ERROR_CORRECTION, errorCorrectionLevel);
-            hints.put(EncodeHintType.MARGIN, 2); // Quiet zone around QR code
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 
-            // Generate QR code bit matrix
+            // Generate QR code byte matrix (ZXing 1.5 uses ByteMatrix)
             QRCodeWriter writer = new QRCodeWriter();
-            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+            ByteMatrix byteMatrix = writer.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
 
             // Convert to BufferedImage
+            int matrixWidth = byteMatrix.getWidth();
+            int matrixHeight = byteMatrix.getHeight();
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             int fgColor = foregroundColor.getRGB();
             int bgColor = backgroundColor.getRGB();
 
+            // Scale matrix to requested image size
+            double scaleX = (double) width / matrixWidth;
+            double scaleY = (double) height / matrixHeight;
+
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    image.setRGB(x, y, bitMatrix.get(x, y) ? fgColor : bgColor);
+                    int matrixX = Math.min((int) (x / scaleX), matrixWidth - 1);
+                    int matrixY = Math.min((int) (y / scaleY), matrixHeight - 1);
+                    // ByteMatrix.get() returns 0 for white, 1 for black
+                    image.setRGB(x, y, byteMatrix.get(matrixX, matrixY) == 1 ? fgColor : bgColor);
                 }
             }
 
