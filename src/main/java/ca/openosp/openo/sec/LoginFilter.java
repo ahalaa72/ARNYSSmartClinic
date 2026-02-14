@@ -85,7 +85,12 @@ public class LoginFilter implements Filter {
             "/registration/form.jsp",
             "/registration/success.jsp",
             "/registration/expired.jsp",
-            "/registration/start"
+            "/registration/start",
+            // REST API endpoints for registration
+            "/ws/rs/registration/validate-token",
+            "/ws/rs/registration/submit",
+            "/ws/rs/registration/config",
+            "/ws/rs/registration/start"
     };
 
     private static final String[] EXEMPT_URLS_FOR_REQUEST_TIMEOUT = {

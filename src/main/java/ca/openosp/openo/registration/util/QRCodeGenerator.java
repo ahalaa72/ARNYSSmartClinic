@@ -189,8 +189,8 @@ public class QRCodeGenerator {
                 for (int y = 0; y < height; y++) {
                     int matrixX = Math.min((int) (x / scaleX), matrixWidth - 1);
                     int matrixY = Math.min((int) (y / scaleY), matrixHeight - 1);
-                    // ByteMatrix.get() returns 0 for white, 1 for black
-                    image.setRGB(x, y, byteMatrix.get(matrixX, matrixY) == 1 ? fgColor : bgColor);
+                    // ByteMatrix.get() returns 0 for black (on), non-zero for white (off) in ZXing 1.5
+                    image.setRGB(x, y, byteMatrix.get(matrixX, matrixY) == 0 ? fgColor : bgColor);
                 }
             }
 

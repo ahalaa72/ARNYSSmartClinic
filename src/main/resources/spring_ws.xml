@@ -224,6 +224,8 @@
 			<bean class="ca.openosp.openo.webserv.rest.LabService" autowire="byName" />
 			<bean class="ca.openosp.openo.webserv.rest.MeasurementService" autowire="byName" />
 			<bean class="ca.openosp.openo.webserv.rest.ConsentService" autowire="byName" />
+			<!-- Patient Self-Registration Module -->
+			<bean class="ca.openosp.openo.registration.service.PatientRegistrationRestService" autowire="byName" />
 		</jaxrs:serviceBeans>
 
 		<jaxrs:extensionMappings>

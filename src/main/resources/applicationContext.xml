@@ -76,6 +76,9 @@
 
 	<!-- setup CXF -->
 	<import resource="classpath:spring_ws.xml" />
+
+	<!-- Patient Self-Registration Module -->
+	<import resource="classpath:applicationContext-registration.xml" />
 	<!-- <context:component-scan base-package="ca.openosp.openo.commn.dao" /> -->
 	
 	<bean id="hl7HandlerMSHMappingDao" class="ca.openosp.openo.commn.dao.HL7HandlerMSHMappingDaoImpl" autowire="byName" />

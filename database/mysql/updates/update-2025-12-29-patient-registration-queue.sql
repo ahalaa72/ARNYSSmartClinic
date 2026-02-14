@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS patient_registration_queue (
     -- Registration Metadata
     registration_token VARCHAR(64) NOT NULL,
     facility_id INT DEFAULT 1,
-    status ENUM('pending', 'approved', 'rejected', 'expired') DEFAULT 'pending',
+    status ENUM('PENDING', 'APPROVED', 'REJECTED', 'EXPIRED') DEFAULT 'PENDING',
 
     -- Timestamps
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -163,9 +163,9 @@ CREATE TABLE IF NOT EXISTS patient_registration_queue (
     emergency_contact_relationship VARCHAR(30),
 
     -- Validation Results
-    hin_validation_status ENUM('valid', 'invalid', 'not_validated') DEFAULT 'not_validated',
+    hin_validation_status ENUM('VALID', 'INVALID', 'NOT_VALIDATED') DEFAULT 'NOT_VALIDATED',
     hin_validation_error VARCHAR(255),
-    duplicate_check_status ENUM('clear', 'potential_duplicate', 'confirmed_duplicate') DEFAULT 'clear',
+    duplicate_check_status ENUM('CLEAR', 'POTENTIAL_DUPLICATE', 'CONFIRMED_DUPLICATE') DEFAULT 'CLEAR',
     duplicate_warning TEXT,
     potential_duplicate_ids VARCHAR(255),
 

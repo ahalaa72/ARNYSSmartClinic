@@ -30,7 +30,7 @@
 <%@ page import="ca.openosp.openo.utility.LoggedInInfo" %>
 <%@ page import="ca.openosp.openo.registration.model.PatientRegistrationQueue" %>
 <%@ page import="ca.openosp.openo.registration.dao.PatientRegistrationQueueDao" %>
-<%@ page import="ca.openosp.openo.commn.dao.ProviderDao" %>
+<%@ page import="ca.openosp.openo.PMmodule.dao.ProviderDao" %>
 <%@ page import="ca.openosp.openo.commn.model.Provider" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -371,8 +371,8 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="field-label">Preferred Name</div>
-                                <div class="field-value <%= registration.getPrefName() == null || registration.getPrefName().isEmpty() ? "empty" : "" %>">
-                                    <%= registration.getPrefName() != null && !registration.getPrefName().isEmpty() ? Encode.forHtml(registration.getPrefName()) : "Not provided" %>
+                                <div class="field-value <%= registration.getPreferredName() == null || registration.getPreferredName().isEmpty() ? "empty" : "" %>">
+                                    <%= registration.getPreferredName() != null && !registration.getPreferredName().isEmpty() ? Encode.forHtml(registration.getPreferredName()) : "Not provided" %>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -499,7 +499,7 @@
                                     <span class="text-muted ms-2">Ver: <%= Encode.forHtml(registration.getVer()) %></span>
                                     <% } %>
 
-                                    <% if (registration.getHinValidated() != null && registration.getHinValidated()) { %>
+                                    <% if (registration.getHinValidationStatus() == PatientRegistrationQueue.HinValidationStatus.VALID) { %>
                                     <div class="validation-success mt-1">
                                         <i class="bi bi-check-circle me-1"></i>Valid health card number
                                     </div>

@@ -855,6 +855,19 @@
         </security:oscarSec>
         <!-- #STATUS END -->
 
+        <!-- #PATIENT SELF-REGISTRATION -->
+        <security:oscarSec roleName="<%=roleName$%>" objectName="_admin" rights="r" reverse="<%=false%>">
+            <div class="adminBox">
+                <h3>&nbsp;Patient Self-Registration</h3>
+                <ul>
+                    <li><a href="#" onclick='popupPage(600, 800, "${pageContext.request.contextPath}/admin/registration/qrcode.jsp");return false;'>QR Code Generation</a></li>
+                    <li><a href="#" onclick='popupPage(800, 1000, "${pageContext.request.contextPath}/admin/registration/queue.jsp");return false;'>Registration Queue</a></li>
+                    <li><a href="#" onclick='popupPage(800, 1000, "${pageContext.request.contextPath}/admin/registration/review.jsp");return false;'>Review Registrations</a></li>
+                </ul>
+            </div>
+        </security:oscarSec>
+        <!-- #PATIENT SELF-REGISTRATION END -->
+
         <!-- #Data Management -->
         <security:oscarSec roleName="<%=roleName$%>" objectName="_admin,_admin.backup" rights="r" reverse="<%=false%>">
 

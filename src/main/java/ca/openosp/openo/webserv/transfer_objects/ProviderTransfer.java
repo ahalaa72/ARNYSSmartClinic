@@ -30,10 +30,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import ca.openosp.openo.commn.model.Provider;
 import org.springframework.beans.BeanUtils;
 
+@XmlRootElement(name = "provider")
 public final class ProviderTransfer {
     private String providerNo;
     private String comments;

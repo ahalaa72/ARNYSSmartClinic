@@ -29,18 +29,19 @@
 <%@ page import="ca.openosp.openo.registration.model.RegistrationModuleConfig" %>
 
 <%
-    // Security check
+    // Security check - use _admin privilege since _registration may not exist
     SecurityInfoManager securityInfoManager = SpringUtils.getBean(SecurityInfoManager.class);
     LoggedInInfo loggedInInfo = LoggedInInfo.getLoggedInInfoFromSession(request);
 
-    if (loggedInInfo == null || !securityInfoManager.hasPrivilege(loggedInInfo, "_registration", "r", null)) {
+    if (loggedInInfo == null || !securityInfoManager.hasPrivilege(loggedInInfo, "_admin", "r", null)) {
         response.sendRedirect(request.getContextPath() + "/login.do");
         return;
     }
 
-    // Get facility configuration
+    // Get facility configuration (with null safety)
     RegistrationModuleConfigDao configDao = SpringUtils.getBean(RegistrationModuleConfigDao.class);
-    RegistrationModuleConfig config = configDao.getConfigByFacility(loggedInInfo.getCurrentFacility().getId());
+    Integer facilityId = (loggedInInfo.getCurrentFacility() != null) ? loggedInInfo.getCurrentFacility().getId() : 1;
+    RegistrationModuleConfig moduleConfig = (configDao != null) ? configDao.findByFacilityId(facilityId) : null;
 
     // Build registration URL
     String baseUrl = request.getScheme() + "://" + request.getServerName();
@@ -53,16 +54,22 @@
     // Generate QR code
     QRCodeGenerator qrGenerator = SpringUtils.getBean(QRCodeGenerator.class);
     String qrCodeBase64 = "";
+    String qrError = "";
     try {
-        qrCodeBase64 = qrGenerator.generateQRCodeBase64(registrationUrl, 400, 400);
+        if (qrGenerator == null) {
+            qrError = "QRCodeGenerator bean not found in Spring context";
+        } else {
+            qrCodeBase64 = qrGenerator.generateQRCodeBase64(registrationUrl, 400, 400);
+        }
     } catch (Exception e) {
-        // Handle error - will show placeholder
+        qrError = "Error generating QR code: " + e.getClass().getName() + " - " + e.getMessage();
+        e.printStackTrace(); // Log to console for debugging
     }
 
     // Get clinic name for branding
     String clinicName = "Our Clinic";
-    if (config != null && config.getClinicName() != null && !config.getClinicName().isEmpty()) {
-        clinicName = config.getClinicName();
+    if (moduleConfig != null && moduleConfig.getClinicName() != null && !moduleConfig.getClinicName().isEmpty()) {
+        clinicName = moduleConfig.getClinicName();
     }
 
     // Get selected layout from parameter
@@ -324,7 +331,12 @@
                     <% } else { %>
                     <div class="alert alert-warning">
                         <i class="bi bi-exclamation-triangle me-2"></i>
-                        Unable to generate QR code. Please check the configuration.
+                        Unable to generate QR code.
+                        <% if (!qrError.isEmpty()) { %>
+                        <br><small class="text-danger"><%= Encode.forHtml(qrError) %></small>
+                        <% } else { %>
+                        Please check the configuration.
+                        <% } %>
                     </div>
                     <% } %>
 

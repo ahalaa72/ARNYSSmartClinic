@@ -9,7 +9,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -352,28 +351,28 @@
 
             tbody.innerHTML = data.map(r => `
                 <tr>
-                    <td><strong>#${r.id}</strong></td>
+                    <td><strong>#\${r.id}</strong></td>
                     <td>
-                        ${escapeHtml(r.full_name || 'N/A')}
-                        ${r.has_duplicate_warning ? '<i class="bi bi-exclamation-triangle warning-icon" title="Potential duplicate"></i>' : ''}
-                        ${r.has_hin_error ? '<i class="bi bi-x-circle warning-icon" title="HIN validation error"></i>' : ''}
+                        \${escapeHtml(r.full_name || 'N/A')}
+                        \${r.has_duplicate_warning ? '<i class="bi bi-exclamation-triangle warning-icon" title="Potential duplicate"></i>' : ''}
+                        \${r.has_hin_error ? '<i class="bi bi-x-circle warning-icon" title="HIN validation error"></i>' : ''}
                     </td>
-                    <td>${r.date_of_birth || 'N/A'}</td>
+                    <td>\${r.date_of_birth || 'N/A'}</td>
                     <td>
-                        <div><i class="bi bi-envelope me-1"></i>${escapeHtml(r.email || 'N/A')}</div>
-                        <div class="small text-muted"><i class="bi bi-phone me-1"></i>${escapeHtml(r.cell_phone || 'N/A')}</div>
+                        <div><i class="bi bi-envelope me-1"></i>\${escapeHtml(r.email || 'N/A')}</div>
+                        <div class="small text-muted"><i class="bi bi-phone me-1"></i>\${escapeHtml(r.cell_phone || 'N/A')}</div>
                     </td>
-                    <td>${formatDate(r.submitted_at)}</td>
-                    <td><span class="status-badge status-${r.status}">${r.status}</span></td>
+                    <td>\${formatDate(r.submitted_at)}</td>
+                    <td><span class="status-badge status-\${r.status}">\${r.status}</span></td>
                     <td>
-                        <a href="review.jsp?id=${r.id}" class="btn btn-sm btn-outline-primary action-btn">
+                        <a href="review.jsp?id=\${r.id}" class="btn btn-sm btn-outline-primary action-btn">
                             <i class="bi bi-eye me-1"></i>Review
                         </a>
-                        ${r.status === 'pending' ? `
-                            <button class="btn btn-sm btn-outline-success action-btn ms-1" onclick="quickApprove(${r.id})">
+                        \${r.status === 'pending' ? `
+                            <button class="btn btn-sm btn-outline-success action-btn ms-1" onclick="quickApprove(\${r.id})">
                                 <i class="bi bi-check"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger action-btn ms-1" onclick="quickReject(${r.id})">
+                            <button class="btn btn-sm btn-outline-danger action-btn ms-1" onclick="quickReject(\${r.id})">
                                 <i class="bi bi-x"></i>
                             </button>
                         ` : ''}
@@ -403,9 +402,9 @@
             document.getElementById('quickActionBody').innerHTML = `
                 <p>Are you sure you want to approve this registration?</p>
                 <div class="alert alert-info">
-                    <strong>${escapeHtml(reg.full_name)}</strong><br>
-                    DOB: ${reg.date_of_birth}<br>
-                    Email: ${escapeHtml(reg.email)}
+                    <strong>\${escapeHtml(reg.full_name)}</strong><br>
+                    DOB: \${reg.date_of_birth}<br>
+                    Email: \${escapeHtml(reg.email)}
                 </div>
             `;
 
@@ -429,7 +428,7 @@
                               placeholder="Reason for rejection..."></textarea>
                 </div>
                 <div class="alert alert-warning">
-                    <strong>${escapeHtml(reg.full_name)}</strong> will be notified of this rejection.
+                    <strong>\${escapeHtml(reg.full_name)}</strong> will be notified of this rejection.
                 </div>
             `;
 
@@ -502,7 +501,7 @@
             toast.innerHTML = `
                 <div class="toast show bg-success text-white">
                     <div class="toast-body">
-                        <i class="bi bi-check-circle me-2"></i>${message}
+                        <i class="bi bi-check-circle me-2"></i>\${message}
                     </div>
                 </div>
             `;
@@ -517,7 +516,7 @@
             toast.innerHTML = `
                 <div class="toast show bg-danger text-white">
                     <div class="toast-body">
-                        <i class="bi bi-x-circle me-2"></i>${message}
+                        <i class="bi bi-x-circle me-2"></i>\${message}
                     </div>
                 </div>
             `;

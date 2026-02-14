@@ -50,7 +50,7 @@ public class RegistrationTokenDaoImpl implements RegistrationTokenDao {
 
     private static final Logger logger = LogManager.getLogger(RegistrationTokenDaoImpl.class);
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "entityManagerFactory")
     private EntityManager entityManager;
 
     // ========================================================================

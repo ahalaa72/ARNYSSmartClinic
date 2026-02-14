@@ -31,8 +31,12 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+import ca.openosp.openo.webserv.transfer_objects.ProviderTransfer;
 
 @XmlRootElement(name = "List")
+@XmlSeeAlso({ProviderTransfer.class})
 public class OscarSearchResponse<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

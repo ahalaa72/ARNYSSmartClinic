@@ -51,12 +51,26 @@ public class AuthenticationInInterceptor extends AbstractPhaseInterceptor<Messag
         return LoggedInInfo.getLoggedInInfoFromSession(request);
     }
 
+    // Public registration endpoints that don't require authentication
+    private static final String[] PUBLIC_PATHS = {
+        "/registration/validate-token",
+        "/registration/submit",
+        "/registration/config",
+        "/registration/start"
+    };
+
     @Override
     public void handleMessage(Message message) throws Fault {
         // allows WADL requests for unauthenticated users
         String messageQueryString = String.valueOf(message.get(Message.QUERY_STRING));
         boolean isServiceRequest = "_wadl".equalsIgnoreCase(messageQueryString);
         if (isServiceRequest) {
+            return;
+        }
+
+        // Allow public registration endpoints without authentication
+        String requestPath = String.valueOf(message.get(Message.REQUEST_URI));
+        if (isPublicPath(requestPath)) {
             return;
         }
 
@@ -72,6 +86,22 @@ public class AuthenticationInInterceptor extends AbstractPhaseInterceptor<Messag
         builder.type(MediaType.TEXT_XML);
         builder.entity("<error>Not authorized</error>");
         message.getExchange().put(Response.class, builder.build());
+    }
+
+    /**
+     * Checks if the request path is a public endpoint that doesn't require authentication.
+     * Used for patient self-registration module public endpoints.
+     */
+    private boolean isPublicPath(String requestPath) {
+        if (requestPath == null) {
+            return false;
+        }
+        for (String publicPath : PUBLIC_PATHS) {
+            if (requestPath.contains(publicPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void logAccessError(Message message) {

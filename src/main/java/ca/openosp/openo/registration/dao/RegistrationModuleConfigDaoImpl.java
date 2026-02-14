@@ -47,7 +47,7 @@ public class RegistrationModuleConfigDaoImpl implements RegistrationModuleConfig
 
     private static final Logger logger = LogManager.getLogger(RegistrationModuleConfigDaoImpl.class);
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "entityManagerFactory")
     private EntityManager entityManager;
 
     @Override

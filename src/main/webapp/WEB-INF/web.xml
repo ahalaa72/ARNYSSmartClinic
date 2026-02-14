@@ -319,6 +319,10 @@
 		<servlet-class>ca.openosp.openo.ui.servlet.ContentRenderingServlet</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>RegistrationStartServlet</servlet-name>
+		<servlet-class>ca.openosp.openo.registration.web.RegistrationStartServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>eformViewForPdfGenerationServlet</servlet-name>
 		<servlet-class>ca.openosp.openo.web.eform.EformViewForPdfGenerationServlet</servlet-class>
 	</servlet>
@@ -421,6 +425,10 @@
 	<servlet-mapping>
 		<servlet-name>ContentRenderingServlet</servlet-name>
 		<url-pattern>/contentRenderingServlet/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RegistrationStartServlet</servlet-name>
+		<url-pattern>/registration/start</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>eformViewForPdfGenerationServlet</servlet-name>

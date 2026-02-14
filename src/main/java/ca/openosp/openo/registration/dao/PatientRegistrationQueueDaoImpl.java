@@ -50,7 +50,7 @@ public class PatientRegistrationQueueDaoImpl implements PatientRegistrationQueue
 
     private static final Logger logger = LogManager.getLogger(PatientRegistrationQueueDaoImpl.class);
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "entityManagerFactory")
     private EntityManager entityManager;
 
     // ========================================================================
